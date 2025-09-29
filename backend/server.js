@@ -14,12 +14,13 @@ const __dirname = path.resolve();
 app.use(express.json());
 app.use("/api/cars", carRoutes);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/frontend/dist")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-  });
-}
+// Serve static files from the frontend dist directory
+app.use(express.static(path.join(__dirname, "frontend/dist")));
+
+// Handle React routing, return all requests to React app
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+});
 
 app.listen(PORT, () => {
   connectDB();
